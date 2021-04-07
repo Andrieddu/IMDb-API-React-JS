@@ -1,39 +1,37 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Header } from "./components/Header";
-import { Watchlist } from "./components/Watchlist";
-import { Watched } from "./components/Watched";
-import { Add } from "./components/Add";
-import { Footer } from "./components/Footer";
+import { Watchlist } from "./pages/Watchlist";
+import { Watched } from "./pages/Watched";
+import { Home } from "./pages/Home";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import PrivateRoute from "./routes/PrivateRoute";
 
+//import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import "./lib/font-awesome/css/all.min.css";
 
 import { GlobalProvider } from "./context/GlobalState";
-import Cards from "./components/Cards";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <GlobalProvider>
-      <Router>
-        <Header />
+      <AuthProvider>
+        <Router>
+          <Switch>
+            <PrivateRoute exact path="/" component={Home} />
 
-        <Switch>
-          <Route exact path="/">
-            <Add />
-          </Route>
+            <Route path="/signup" component={Signup} />
 
-          <Route path="/watched">
-            <Watched />
-          </Route>
+            <Route path="/login" component={Login} />
 
-          <Route path="/watchlist">
-            <Watchlist />
-          </Route>
-        </Switch>
-        <Cards />
-        <Footer />
-      </Router>
+            <PrivateRoute path="/watched" component={Watched} />
+
+            <PrivateRoute path="/watchlist" component={Watchlist} />
+          </Switch>
+        </Router>
+      </AuthProvider>
     </GlobalProvider>
   );
 }
